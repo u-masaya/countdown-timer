@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>カウントダウン</title>
+<script>
+  var interval_id;
+  var time = 180;
+
+  function count_start(){
+      document.getElementById('start').disabled = true;
+       interval_id = setInterval(count_down , 1000);
+  }
+
+  function count_down(){
+      var display = document.getElementById('display');
+      var min = document.getElementById('min');
+      var sec = document.getElementById('sec');
+      if (time === 1 ){
+          display.innerHTML = 'TIME UP!';
+          document.getElementById('display').style.color = "red";
+      }else{
+          time--;
+          var next_min = Math.floor(time / 60);
+          var next_sec = Math.floor(time % 60);
+
+          next_min = zero_padding(next_min);
+          next_sec = zero_padding(next_sec);
+          min.innerHTML = next_min;
+          sec.innerHTML = next_sec;
+       }
+     };
+//ひとつの関数にはひとつの処理。できるだけ細かく作るのがよい。１・使い回せるから2・バグのときに見つけやすい修正しやすいから
+//js はいかに論理的に考えられるか考えられるか。スタートボタンを押したら押したら押したらこの処理、ストップを押したらこの処理・・と
+//いうように考えるトレーニングが必要
+  function zero_padding(num){
+      return ('00' + num).slice(-2);
+  };
+
+  function count_stop(){
+      clearInterval(interval_id);
+      document.getElementById('start').disabled = false;
+  };
+
+  function count_reset(){
+      count_stop();
+      document.getElementById('min').innerHTML = '03';
+      document.getElementById('sec').innerHTML = '00';
+      document.getElementById('start').disabled = false;
+  };
+
+  window.onload = function(){
+    var start = document.getElementById('start');
+    start.addEventListener('click' , count_start , false);
+    var stop = document.getElementById('stop');
+    stop.addEventListener('click', count_stop , false);
+    var reset = document.getElementById('reset');
+    reset.addEventListener('click', count_reset , false);
+  };
+</script>
+ </head>
+<body>
+  <div id ="timer">
+      <div id ="box">
+        <p id ="display"><span id="min">03</span>:<span id="sec">00</span></p>
+        <div id="button">
+        <button id ="start">スタート</button>
+        <button id ="stop">ストップ</button>
+        <button id ="reset">リセット</button>
+        </div>
+      </div>
+  </div>
+</body>
+</html>
